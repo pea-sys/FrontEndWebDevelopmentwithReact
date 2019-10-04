@@ -3,6 +3,7 @@ import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbIte
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 import { Loading } from './LoadingComponent';
+import { baseUrl } from '../shared/baseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -12,7 +13,7 @@ function RenderDish({ dish }) {
     return (
         <div className="col-12 col-md-5 m-1">
             <Card>
-                <CardImg width="100" src={dish.image} alt={dish.name} />
+                <CardImg top src={baseUrl + dish.image} alt={dish.name} />
                 <CardBody>
                     <CardTitle>{dish.name}</CardTitle>
                     <CardText>{dish.description}</CardText>
@@ -22,7 +23,7 @@ function RenderDish({ dish }) {
     );
 }
 
-function RenderComments({ comments ,addComment,dishId}) {
+function RenderComments({ comments, addComment, dishId }) {
     if (comments != null) {
         let comms = comments.map((comm, i) => {
             let date = new Intl.DateTimeFormat('en-US', {
@@ -60,18 +61,18 @@ function RenderComments({ comments ,addComment,dishId}) {
 const DishDetail = (props) => {
 
     if (props.isLoading) {
-        return(
+        return (
             <div className="container">
-                <div className="row">            
+                <div className="row">
                     <Loading />
                 </div>
             </div>
         );
     }
     else if (props.errMess) {
-        return(
+        return (
             <div className="container">
-                <div className="row">            
+                <div className="row">
                     <h4>{props.errMess}</h4>
                 </div>
             </div>
@@ -91,11 +92,11 @@ const DishDetail = (props) => {
                     </div>
                 </div>
                 <div className="row">
-                        <RenderDish dish={props.dish} />
-                        <RenderComments comments={props.comments}
-        addComment={props.addComment}
-        dishId={props.dish.id}
-      />
+                    <RenderDish dish={props.dish} />
+                    <RenderComments comments={props.comments}
+                        addComment={props.addComment}
+                        dishId={props.dish.id}
+                    />
                 </div>
             </div>
 
@@ -127,7 +128,7 @@ export class CommentForm extends Component {
     handleSubmit(values) {
         this.toggleModal();
 
-        this.props.addComment(this.props.dishId,values.rating,values.author,values.message);
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.message);
     }
 
     render() {
