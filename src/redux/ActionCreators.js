@@ -45,6 +45,29 @@ export const postComment = (dishId, rating, author, comment) => (dispatch) => {
             alert('Comments could not be posted:\n' + error.message)
         })
 };
+export const postFeedback = (feedback) => () => {
+    const newFeedback = Object.assign({ date: new Date().toISOString() }, feedback);
+
+	return fetch(baseUrl + 'feedback', {
+		body: JSON.stringify(feedback),
+		credentials: 'same-origin',
+		headers:{
+			'Content-type':'application/json'
+		},
+		method: 'POST',
+	}).then(response => {
+		if(response.ok)
+			return response 
+		else {
+			var error = new Error('Error' + response.status + ':' + response.statusText)
+			error.response = response
+			throw error  
+		}
+	})
+	.then(response => response.json())
+	.then(feedback => alert('Your feedback is submitted \n' + JSON.stringify(feedback)))
+	.catch(error => alert('Your feedback could not be sent'))
+} 
 export const fetchDishes = () => (dispatch) => {
 
     dispatch(dishesLoading(true));
@@ -143,3 +166,5 @@ export const addLeaders = (leaders) => ({
     type: ActionTypes.ADD_LEADERS,
     payload: leaders
 }); 
+
+
